@@ -1,0 +1,98 @@
+import java.util.Stack;
+
+class Node
+{
+	int data;
+    Node next;
+    Node prev;
+    public Node(int x)
+    {
+    	this.data = x;
+        next = null;   
+        prev=null;
+    }
+}
+
+class DoubleList
+{
+	Node head;    
+    public DoubleList()
+    {
+    	head = null;        
+    }
+    public boolean isEmpty()
+    {
+    	return (head==null)?true:false;
+    }
+    public void Add(int x)
+    {
+    	Node newnode = new Node(x);
+        if(isEmpty())
+        {
+        	head = newnode;            
+        }
+        else
+        {        	         
+        	Node p = head;
+            while(p.next!=null) p = p.next;
+            p.next = newnode;
+            newnode.prev = p;
+        }
+    }
+    
+    public void DisplayReverse()
+    {
+    	if(isEmpty())
+        {
+        	System.out.println("List is Empty!");	
+        }
+        else
+        {
+        	Node p = head;
+            while(p.next!=null) p = p.next;
+            Node q = p;//q trỏ tới cuối danh sách
+            
+            while(q!=null)
+            {
+            	System.out.println(q.data);
+                q = q.prev;
+            }
+            
+            
+            
+        }
+    }
+    
+    public void Display()
+    {
+    	if(isEmpty())
+        {
+        	System.out.println("List is Empty!");	
+        }
+        else
+        {
+        	Node p = head;
+            while(p!=null)
+            {
+            	int x = p.data;
+                System.out.println(x);
+                p=p.next;
+            }
+        }
+    }
+    
+}
+
+
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Single Link List Example");   
+    
+    DoubleList L = new DoubleList();
+    for(int i=1; i<=5; i++)
+    	L.Add(i);         
+    
+    L.DisplayReverse();
+  }
+}
