@@ -15,12 +15,13 @@ class ArrayQueue
     }
 	public boolean isEmpty()
 	{
-        if(front == -1) return true;
+        if(front == -1 || front > rear) return true;
         else return false;
 	}
 	public boolean isFull()
 	{
-	    if(rear >= maxsize) return true;
+
+	    if((front==0 && rear==maxsize-1)||(front==rear+1)) return true;
 	    else return false;
 	}
     public void Endqueue(int x)
@@ -72,8 +73,12 @@ public class Main {
     System.out.println("Array Queue Example");
 
     ArrayQueue Q = new ArrayQueue(10);
-    for(int i=10; i<=15; i++)
+    for(int i=10; i<=12; i++)
         Q.Endqueue(i);
+
     Q.Display();
+
+    System.out.println(Q.isEmpty());
+
   }
 }
