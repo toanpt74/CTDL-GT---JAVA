@@ -1,0 +1,21 @@
+import java.util.Stack;
+ 
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Stack in java!");   
+    
+    Stack<Integer> S = new Stack<Integer>();
+    
+    for(int i=1; i<=5; i++)
+    	S.push(i);
+    
+    System.out.println("There are " + S.size() + " in stack");   
+   	
+    while(!S.isEmpty())
+    {
+    	int x = S.pop();
+        System.out.println(x);
+    }
+                
+  }
+}
