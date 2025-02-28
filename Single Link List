@@ -1,0 +1,116 @@
+import java.util.Stack;
+
+class Node
+{
+	int data;
+    Node next;
+    public Node(int x)
+    {
+    	this.data = x;
+        next = null;
+    }
+}
+
+class SingleList
+{
+	Node head;
+    public SingleList()
+    {
+    	head = null;
+    }
+    public boolean isEmpty()
+    {
+    	return (head==null)?true:false;
+    }
+    public void Add(int x)
+    {
+    	Node newnode = new Node(x);
+        if(isEmpty())
+        	head = newnode;
+        else
+        {
+        	Node p = head;
+            while(p.next!=null) p = p.next;
+            p.next = newnode;
+        }
+    }
+    
+    public void AddFirst(int x)
+    {
+    	Node newnode = new Node(x);
+        if(isEmpty()) head = newnode;
+        else
+        {
+        	newnode.next = head;
+            head = newnode;
+        }
+    }
+    public void AddLast(int x)
+    {
+    	Node newnode = new Node(x);
+        if(isEmpty()) head = newnode;
+        else
+        {
+        	Node p = head;
+            while(p.next!=null) p = p.next;
+            p.next = newnode;
+        }
+    }
+    //Thêm phần tử x vào sau phần tử y trong danh sách, nếu không tồn tại y thì thêm vào cuối danh sách
+    public boolean Insert(int x, int y) 
+    {
+    	Node newnode = new Node(x);
+        Node p = head;
+        Node q = head;
+        if(isEmpty()) return false;
+        //Tìm kiếm phần tử y
+        while(p.next!=null && p.data!=y) p= p.next;
+        //Phần tử tìm thấy ở cuối danh sách
+        if(p.next==null) AddLast(x);
+        else
+        {
+        	q = p.next;
+            p.next = newnode;
+            newnode.next = q;
+        }                        
+        return true;
+    }
+    
+    
+    
+    public void Display()
+    {
+    	if(isEmpty())
+        {
+        	System.out.println("List is Empty!");	
+        }
+        else
+        {
+        	Node p = head;
+            while(p!=null)
+            {
+            	int x = p.data;
+                System.out.println(x);
+                p = p.next;
+            }
+        }
+    }
+    
+}
+
+
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Single Link List Example");   
+    
+    SingleList L = new SingleList();
+    for(int i=1; i<=5; i++)
+    	L.Add(i);         
+    L.Insert(99,5);
+    L.Display();
+  }
+}
+////////////////////////////////////////////////
+1. Hãy thêm một con trỏ tail để lưu phần tử cuối cùng của danh sách và cài đặt lại danh sách
+2. Viết thủ tục xóa một phần tử khỏi danh sách
