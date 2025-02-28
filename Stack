@@ -1,0 +1,64 @@
+ 
+class ArrayStack{
+	private int maxsize;
+    private int top;
+    private int[]val;
+    
+    public ArrayStack()
+    {
+    	top=-1;
+    }
+    public ArrayStack(int m)
+    {
+      	maxsize = m; 
+        top=-1; 
+        val = new int[maxsize];
+    }
+    public boolean isEmpty(){
+    	if(top<0) return true;
+        else return false;
+    }
+    public boolean isFull(){
+    	if(top >=maxsize) return true;
+        else return false;
+    }
+    public void Push(int value)
+    {
+    	if(!isFull())
+        {
+        	top++;
+            val[top] = value;
+        }
+        else System.out.println("Stack is Full");
+    }
+    public int Pop()
+    {
+    	int value=0;
+    	if(!isEmpty())
+        {
+        	value = val[top];
+            top--;
+        }
+        return value;
+    }
+    public void Display()
+    {
+    	while(!isEmpty())
+        {
+        	int v = this.Pop();
+            System.out.println(v);
+        }
+    }
+    
+}
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Stack Example");
+    ArrayStack S = new ArrayStack(10);
+    for(int i=1; i<=10; i++)
+    	S.Push(i);
+    
+    System.out.println("There are");
+    S.Display();
+  }
+}
