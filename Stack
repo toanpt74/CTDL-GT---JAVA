@@ -43,11 +43,21 @@ class ArrayStack{
     }
     public void Display()
     {
-    	while(!isEmpty())
+    	if(isEmpty())
+        {
+        	System.out.println("Stack is Empty");	
+            return;
+        }
+        while(!isEmpty())
         {
         	int v = this.Pop();
             System.out.println(v);
         }
+    }
+    public void Clear()
+    {
+    	top = -1;
+        maxsize =0;
     }
     
 }
@@ -60,5 +70,7 @@ public class Main {
     
     System.out.println("There are");
     S.Display();
-  }
+    S.Clear();
+  	S.Display();
+  }    
 }
