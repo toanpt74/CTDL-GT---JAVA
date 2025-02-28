@@ -1,0 +1,79 @@
+class ArrayQueue
+{
+	int front, rear;
+    int []data;
+    int maxsize;
+    public ArrayQueue()
+    {
+    	front=rear =0;
+    }
+    public ArrayQueue(int size)
+    {
+    	front=rear =-1;
+        maxsize = size;
+        data = new int[size];
+    }
+	public boolean isEmpty()
+	{
+        if(front == -1) return true;
+        else return false;
+	}
+	public boolean isFull()
+	{
+	    if(rear >= maxsize) return true;
+	    else return false;
+	}
+    public void Endqueue(int x)
+    {
+        if(!isFull())
+        {
+            if(front ==-1)
+            {
+                front =0;
+                rear =0;
+                data[front] = x;
+            }
+            else
+            {
+                rear++;
+                data[rear] = x;
+            }
+        }
+        else  System.out.println("Queue is full");
+    }
+    public int Dequeue()
+    {
+        int x=0;
+        if(isEmpty())
+        {
+            System.out.println("Queue is empty");
+        }
+        else
+        {
+            x = data[front];
+            front++;
+        }
+        return x;
+    }
+
+    public void Display()
+    {
+        while(front<=rear)
+        {
+            int x = Dequeue();
+            System.out.println(x);
+        }
+    }
+
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Array Queue Example");
+
+    ArrayQueue Q = new ArrayQueue(10);
+    for(int i=10; i<=15; i++)
+        Q.Endqueue(i);
+    Q.Display();
+  }
+}
