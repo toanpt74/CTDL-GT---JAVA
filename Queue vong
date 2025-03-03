@@ -10,12 +10,13 @@ class ArrayQueue
     }
     public boolean isEmpty()
     {
-        if(front==-1 || front > rear) return true;
+        System.out.println("isEmpty: front=" + front + " rear=" + rear);
+        if(front == rear) return true;
         else return false;
     }
     public boolean isFull()
     {
-        if((front==0 && rear==size-1)||(front > rear)) return true;
+        if( (rear+1)%size == front) return true;
         else return false;
     }
     public void enQueue(int x)
@@ -29,14 +30,8 @@ class ArrayQueue
                 data[0] = x;
                 front = 0; rear =0;
             }
-            else if(rear < size-1)
-            {
-                rear++;
-                data[rear] = x;
-            }
-            else
-            {
-                rear =0;
+            else {
+                rear = (rear + 1)%size;
                 data[rear] = x;
             }
         }
@@ -56,10 +51,10 @@ class ArrayQueue
             else
             {
                 v = data[front];
-                front++;
+                front = (front+1)%size;
             }
         }
-        System.out.println("front:" + front + ", rear:" + rear);
+        System.out.println("in deQueue - front:" + front + ", rear:" + rear);
         return v;
     }
 
@@ -67,6 +62,7 @@ class ArrayQueue
     {
         for(int i=0; i<size; i++)
             System.out.print(data[i] + ",");
+        System.out.println();
     }
 }
 
@@ -74,23 +70,20 @@ class ArrayQueue
 public class Main {
   public static void main(String[] args) {
     System.out.println("Array Queue Example");
-
+    int x=0;
     ArrayQueue Q = new ArrayQueue(3);
     Q.enQueue(1);
     Q.enQueue(2);
     Q.enQueue(3);
-
-    System.out.println("---------------1-----------------");
+    System.out.println("---------1---------:"+Q.isFull());
     Q.deQueue();
-
-    System.out.println("---------------2-----------------");
-    Q.enQueue(10);
-
-    System.out.println(Q.isEmpty());
-    System.out.println(Q.isFull());
-    
+    Q.enQueue(12);
     Q.Display();
-
+    System.out.println("---------2--------:"+Q.isFull());
+    Q.deQueue();
+    Q.enQueue(100);
+    Q.Display();
+    System.out.println("----------3-----------:"+Q.isFull());
 
   }
 }
