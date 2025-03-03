@@ -1,0 +1,172 @@
+
+class Node
+{
+    Object data;
+    Node next;
+    public Node(Object x){
+        data = x;
+        next = null;
+    }
+}
+class Queue
+{
+    protected Node head, tail;
+    public Queue()
+    {
+        head = tail = null;
+    }
+    public boolean isEmpty()
+    {
+        if(head == null) return true;
+        else return false;
+    }
+    public void enQueue(Object item)
+    {
+        Node p = new Node(item);
+        if(isEmpty())
+        {
+            head = tail = p;
+        }
+        else {
+            tail.next = p;
+            tail = p;
+        }
+    }
+    public Object deQueue()
+    {
+        Object x=null;
+        Node p;
+        if(isEmpty()) System.out.println("Queue is Empty");
+        else{
+            p = head;
+            head = null;
+            x = p.data;
+            head = p.next;
+        }
+        return x;
+    }
+    public void Display()
+    {
+        Node p = head;
+        while(p!=null)
+        {
+            Object x = p.data;
+            System.out.println(x);
+            p=p.next;
+        }
+    }
+}
+
+
+class TreeNode
+ {
+    int info;
+    TreeNode left, right;
+    public TreeNode(int x)
+    {
+        info = x;
+        left = right = null;
+    }
+ }
+
+
+ 
+ class BinaryTree
+ {
+    TreeNode root;
+    public BinaryTree(){
+        root=null;
+    }
+    public TreeNode Insert(int x)
+    {
+        TreeNode p = new TreeNode(x);
+        if(root==null) {
+            root = p;
+            return p;
+        }
+        
+        TreeNode current, parent;
+        current = root;
+        parent = null;
+        
+        while(current!=null)
+        {
+			if(current.info==x)
+			{
+				System.out.println(" The key " + x + " already exists, no insertion");
+				return p;  
+			}
+			parent = current;
+			if(x < current.info) current = current.left;
+			else current = current.right;			
+		}
+		if(x < parent.info) parent.left = p;
+		else parent.right = p;
+		
+		return p;
+    }
+	void preOrder(TreeNode p)
+    { 		 
+		if(p==null) return;		 
+		System.out.println(p.info + ",");
+		preOrder(p.left);
+		preOrder(p.right);
+    }
+	void postOrder(TreeNode p)
+    { 		 
+		if(p==null) return;		 		
+		postOrder(p.left);
+		postOrder(p.right);
+		System.out.println(p.info + ",");
+    }
+	void inOrder(TreeNode p)
+    { if(p==null) return;
+      inOrder(p.left);
+      System.out.println(p.info + ",");
+      inOrder(p.right);
+    }
+	
+	public void breadthSearch()
+	{
+		Queue Q = new Queue();
+		if(root==null) return;
+		Q.enQueue(root);
+		TreeNode p;
+		while(!Q.isEmpty())
+		{
+			p = (TreeNode)Q.deQueue();
+			System.out.println(p.info + ",");	
+			if(p.left!=null)
+				Q.enQueue(p.left);
+			if(p.right!=null)
+				Q.enQueue(p.right);
+			
+		}
+	}
+
+
+ }
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Binary Tree Example");
+	TreeNode root;
+	BinaryTree T = new BinaryTree();
+	root = T.Insert(10);
+	T.Insert(5);
+	T.Insert(3);
+	T.Insert(15);
+	T.Insert(7);
+	T.Insert(12);
+	T.Insert(18);
+	System.out.println(" Duyet thu tu truoc");
+	T.preOrder(root);
+	System.out.println(" Duyet thu tu sau");
+	T.postOrder(root);
+	System.out.println(" Duyet thu tu giua");
+	T.inOrder(root);
+	System.out.println("----------breadthSearch-------------");
+	T.breadthSearch();
+
+  }
+}
