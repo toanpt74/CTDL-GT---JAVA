@@ -1,0 +1,91 @@
+ class Node
+ {
+    int info;
+    Node left, right;
+    public Node(int x)
+    {
+        info = x;
+        left = right = null;
+    }
+ }
+ class BinaryTree
+ {
+    Node root;
+    public BinaryTree(){
+        root=null;
+    }
+    public Node Insert(int x)
+    {
+        Node p = new Node(x);
+        if(root==null) {
+            root = p;
+            return p;
+        }
+        
+        Node current, parent;
+        current = root;
+        parent = null;
+        
+        while(current!=null)
+        {
+			if(current.info==x)
+			{
+				System.out.println(" The key " + x + " already exists, no insertion");
+				return p;  
+			}
+			parent = current;
+			if(x < current.info) current = current.left;
+			else current = current.right;			
+		}
+		if(x < parent.info) parent.left = p;
+		else parent.right = p;
+		
+		return p;
+    }
+	void preOrder(Node p)
+    { 		 
+		if(p==null) return;		 
+		System.out.println(p.info + ",");
+		preOrder(p.left);
+		preOrder(p.right);
+    }
+	void postOrder(Node p)
+    { 		 
+		if(p==null) return;		 		
+		postOrder(p.left);
+		postOrder(p.right);
+		System.out.println(p.info + ",");
+    }
+	void inOrder(Node p)
+    { if(p==null) return;
+      inOrder(p.left);
+      System.out.println(p.info + ",");
+      inOrder(p.right);
+    }
+
+
+
+ }
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Binary Tree Example");
+	Node root;
+	BinaryTree T = new BinaryTree();
+	root = T.Insert(10);
+	T.Insert(5);
+	T.Insert(3);
+	T.Insert(15);
+	T.Insert(7);
+	T.Insert(12);
+	T.Insert(18);
+	System.out.println(" Duyet thu tu truoc");
+	T.preOrder(root);
+	System.out.println(" Duyet thu tu sau");
+	T.postOrder(root);
+	System.out.println(" Duyet thu tu giua");
+	T.inOrder(root);
+	
+
+  }
+}
