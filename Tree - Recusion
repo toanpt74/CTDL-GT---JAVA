@@ -1,0 +1,69 @@
+class TreeNode
+{
+	int data;
+	TreeNode left;
+	TreeNode right;
+	public TreeNode()
+	{
+		data =0;
+		left=right=null;
+	}
+	public TreeNode(int x){
+		data = x;
+		left = right = null;
+	}
+}
+
+class BST 
+{
+	TreeNode root;
+	public BST(){
+		root = null;
+	}
+	public void createTree(int v)
+	{
+		root = InsertNode(root, v);
+	}
+	public TreeNode InsertNode(TreeNode root, int x)
+	{
+		if(root==null){
+			root = new TreeNode(x);
+			return root;
+		}
+		
+		if(x < root.data) root.left = InsertNode(root.left, x);
+		else if(x > root.data) root.right = InsertNode(root.right, x);
+		
+		return root;
+	}
+	public void DisplayPreOrder()
+	{
+		preOrder(root);
+	}
+	public void preOrder(TreeNode p)
+	{
+		if(p!=null){
+			System.out.println(p.data);
+			preOrder(p.left);
+			preOrder(p.right);
+		}
+	}
+	 	
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Binary Tree Example");
+	 
+	BST tree = new BST();
+	tree.createTree(10);
+	tree.createTree(5);
+	tree.createTree(3);
+	tree.createTree(15);
+	tree.createTree(7);
+	tree.createTree(12);
+	tree.createTree(18);
+	tree.DisplayPreOrder();
+	
+  }
+}
