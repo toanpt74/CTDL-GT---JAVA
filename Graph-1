@@ -1,0 +1,134 @@
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
+class Graph
+{
+	int verticle_num;
+	int [][] A;
+	public Graph()
+	{
+		//verticle_num = 6;
+		verticle_num = 7;
+		
+		A = new int[verticle_num][verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			for(int j=0; j<verticle_num; j++)
+				A[i][j] =0;
+		/*A[0][0]=1;
+		A[0][1]=1;
+		A[0][2]=1;
+		A[0][3]=1;
+		A[1][0]=1;
+		A[1][1]=1;
+		A[1][4]=1;
+		A[2][0]=1;
+		A[2][2]=1;
+		A[2][4]=1;
+		A[2][5]=1;
+		A[3][0]=1;
+		A[3][3]=1;
+		A[3][5]=1;
+		A[4][1]=1;
+		A[4][2]=1;
+		A[4][4]=1;
+		A[5][2]=1;
+		A[5][3]=1;
+		A[5][5]=1;*/
+		
+		A[0][2]=1;
+		A[0][3]=1;
+		A[0][5]=1;
+		A[1][3]=1;
+		A[1][4]=1;
+		A[2][0]=1;
+		A[2][5]=1;
+		A[3][0]=1;
+		A[3][1]=1;
+		A[3][4]=1;
+		A[3][5]=1;
+		A[4][2]=1;
+		A[4][3]=1;
+		A[5][0]=1;
+		A[5][2]=1;
+		A[5][3]=1;
+		 
+	}
+	public void Display()
+	{
+		System.out.println("-----------Adjacency Matrix of Graph-------------");
+		for(int i=0; i<verticle_num; i++)
+		{
+			for(int j=0; j<verticle_num; j++)
+				System.out.print(A[i][j] + "  ");
+			System.out.println();
+		}
+	}
+	public boolean checkAdj(int i, int j)
+	{
+		if(A[i][j]==1) return true;
+		else return false;
+	}
+	public void breadthFirstSearch(int k)
+	{
+		Queue <Integer> q = new LinkedList<>();
+		String[] VerticleStatus = new String[verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			VerticleStatus[i] = "White";
+		
+		q.add(k); VerticleStatus[k] ="Gray";
+		
+		while(!q.isEmpty())
+		{
+			int u =(int)q.poll();
+			System.out.print(u + "-> ");
+			for(int v=0; v<verticle_num; v++)
+			{
+				if(VerticleStatus[v] =="White" && checkAdj(u, v))
+				{
+					q.add(v);
+					VerticleStatus[v]= "Gray";
+				}
+			}
+			VerticleStatus[u] ="Black";
+		}
+			
+	}
+	public void DFS(int k)
+	{
+		Stack<Integer> S = new Stack<>();
+		String[] VerticleStatus = new String[verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			VerticleStatus[i] = "White";
+		S.push(k);
+		VerticleStatus[k] ="Gray";
+		while(!S.isEmpty())
+		{
+			int u =(int)S.pop();
+			System.out.print(u + "-> ");
+			for(int v=0; v<verticle_num; v++)
+			{
+				if(VerticleStatus[v] =="White" && checkAdj(u, v))
+				{
+					S.push(v);
+					VerticleStatus[v]= "Gray";
+				}
+			}
+			VerticleStatus[u] ="Black";
+		}
+	}
+	
+	
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Graph Example");	 
+	
+	Graph g = new Graph();
+	g.Display();
+	System.out.println("Breadth First Search on the Graph");
+	g.breadthFirstSearch(0);
+	System.out.println("Depth First Search on the Graph");
+	g.DFS(0);
+  }
+}
