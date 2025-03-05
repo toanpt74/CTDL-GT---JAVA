@@ -1,0 +1,262 @@
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
+class Graph
+{
+	int verticle_num;
+	int [][] A;
+	int [][] W;
+	int MAX = 1000;
+	public Graph()
+	{
+		//verticle_num = 6;
+		verticle_num = 7;
+		
+		A = new int[verticle_num][verticle_num];
+		W = new int[verticle_num][verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			for(int j=0; j<verticle_num; j++)
+				A[i][j] =0;
+		/*A[0][0]=1;
+		A[0][1]=1;
+		A[0][2]=1;
+		A[0][3]=1;
+		A[1][0]=1;
+		A[1][1]=1;
+		A[1][4]=1;
+		A[2][0]=1;
+		A[2][2]=1;
+		A[2][4]=1;
+		A[2][5]=1;
+		A[3][0]=1;
+		A[3][3]=1;
+		A[3][5]=1;
+		A[4][1]=1;
+		A[4][2]=1;
+		A[4][4]=1;
+		A[5][2]=1;
+		A[5][3]=1;
+		A[5][5]=1;*/
+		
+		A[0][2]=1;
+		A[0][3]=1;
+		A[0][5]=1;
+		A[1][3]=1;
+		A[1][4]=1;
+		A[2][0]=1;
+		A[2][5]=1;
+		A[3][0]=1;
+		A[3][1]=1;
+		A[3][4]=1;
+		A[3][5]=1;
+		A[4][2]=1;
+		A[4][3]=1;
+		A[5][0]=1;
+		A[5][2]=1;
+		A[5][3]=1;
+		//--------------------TAO DO THI CO TRONG SO ---------------------------
+		for(int i=0; i<verticle_num; i++)
+			for(int j=0;j<verticle_num;j++)
+				W[i][j] = MAX; //G/s chọn số này là số vô cùng
+		W[0][1] = 2;
+		W[0][2] = 4;
+		W[1][3] = 7;
+		W[1][4] = 1;
+		
+		W[2][5] = 3;
+		W[3][6] = 2;
+		W[4][6] = 5;
+		W[5][6] = 2;
+		 
+	}
+	public void Display()
+	{
+		System.out.println("-----------Adjacency Matrix of Graph-------------");
+		for(int i=0; i<verticle_num; i++)
+		{
+			for(int j=0; j<verticle_num; j++)
+				System.out.print(A[i][j] + "  ");
+			System.out.println();
+		}
+	}
+	public boolean checkAdj(int i, int j)
+	{
+		if(A[i][j]==1) return true;
+		else return false;
+	}
+	public boolean isAdj(int i, int j)
+	{
+		if(W[i][j] != MAX) return true;
+		else return false;
+	}
+	public void breadthFirstSearch(int k)
+	{
+		Queue <Integer> q = new LinkedList<>();
+		String[] VerticleStatus = new String[verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			VerticleStatus[i] = "White";
+		
+		q.add(k); VerticleStatus[k] ="Gray";
+		
+		while(!q.isEmpty())
+		{
+			int u =(int)q.poll();
+			System.out.print(u + "-> ");
+			for(int v=0; v<verticle_num; v++)
+			{
+				if(VerticleStatus[v] =="White" && checkAdj(u, v))
+				{
+					q.add(v);
+					VerticleStatus[v]= "Gray";
+				}
+			}
+			VerticleStatus[u] ="Black";
+		}
+			
+	}
+	public void DFS(int k)
+	{
+		Stack<Integer> S = new Stack<>();
+		String[] VerticleStatus = new String[verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			VerticleStatus[i] = "White";
+		S.push(k);
+		VerticleStatus[k] ="Gray";
+		while(!S.isEmpty())
+		{
+			int u =(int)S.pop();
+			System.out.print(u + "-> ");
+			for(int v=0; v<verticle_num; v++)
+			{
+				if(VerticleStatus[v] =="White" && checkAdj(u, v))
+				{
+					S.push(v);
+					VerticleStatus[v]= "Gray";
+				}
+			}
+			VerticleStatus[u] ="Black";
+		}
+	}
+	
+	//Thuật toán dijstra tìm đường đi ngắn nhất từ đỉnh nguồn tới tất cả các đỉnh còn lại
+	int minDist(int[] dist, boolean[] visit)
+	{
+		int min_index =0;
+		int min = MAX;
+		for(int v =0; v<verticle_num; v++)
+		{
+			if(visit[v]==false)
+			{
+				if(dist[v] <= min)
+				{
+					min_index = v;
+					min = dist[v];
+				}
+			}
+		}
+		return min_index;
+	}
+	 
+	public void printSolution(int s, int[] dist)
+	{
+		System.out.println("Khoảng cách từ đỉnh nguồn A đến các đỉnh");
+		for(int i=0; i<verticle_num; i++)
+		{
+			System.out.println(s + " -> " + i + " = " + dist[i]);
+		}
+	}
+	/*Mô tả thuật toán
+		1. Khởi tạo khoảng cách từ đỉnh nguồn tới chính nó là 0
+			+ Khoảng cách từ đỉnh nguồn tới tất cả các đỉnh khác là vô cùng
+			+ Tạo biến Visited đánh dấu các đỉnh chưa duyệt
+		2. Chọn đỉnh có khoảng cách nhỏ nhất (ban đầu chính là đỉnh nguồn).
+			+ Đánh dấu đỉnh vừa chọn là đã duyệt
+			+ Xét tất cả các cạnh kề và chưa duyệt của đỉnh vừa chọn
+		
+			
+	*/
+	public void DisplayDist(int[] d, boolean[] v)
+	{
+		System.out.println("--------------");
+		for(int i=0; i<verticle_num;i++){
+			System.out.print(d[i] + ",");
+		}
+		System.out.println();
+		for(int i=0; i<verticle_num;i++){
+			System.out.print(v[i] + ",");
+		}
+	}
+	public void printPath(int[] parent, int j)
+	{
+		if(parent[j] ==-1)
+			return;
+		printPath(parent, parent[j]);
+		System.out.print(j + "->");
+	}
+	public void printSolutionPath(int[] dist, int n, int[] parent, int src)
+	{
+		System.out.println("Khoảng cách từ đỉnh nguồn A đến các đỉnh");
+		for(int i=0; i<n; i++)
+		{
+			if(i!=src){
+				System.out.println("Distance from " + src + " to " + i + " is: " + dist[i]);
+				
+				System.out.print("Path is: " + src + "->");
+				printPath(parent, i);
+			}
+			System.out.println("");			
+		}
+	}
+	public void Dijstra(int source)
+	{
+		
+		int[]parent = new int[verticle_num];
+		int [] dist = new int[verticle_num];
+		boolean[] visited = new boolean[verticle_num];
+		for(int i=0; i<verticle_num;i++)
+		{
+			dist[i] = MAX;
+			visited[i] = false;	
+			parent[i]=-1;			
+		}
+		dist[source] = 0;
+		
+		for(int i =0; i < verticle_num-1;i++)
+		{
+			int v = minDist(dist, visited);		
+						
+			visited[v] = true;			 
+			for(int u =0; u < verticle_num; u++)
+			{
+				if(isAdj(v,u) && visited[u] ==false){
+					if(dist[u] > dist[v] + W[v][u]){
+						dist[u] = dist[v] + W[v][u] ;
+						parent[u] = v;	
+					}
+				}
+			}							
+		}
+		 
+		printSolutionPath(dist, verticle_num, parent, source);
+		System.out.println("---------------------------------");
+		for(int i=0; i<verticle_num; i++)
+			System.out.print(parent[i] + ",");
+	}
+	
+	
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Graph Example");	 
+	
+	Graph g = new Graph();
+	g.Display();
+	System.out.println("Breadth First Search on the Graph");
+	g.breadthFirstSearch(0);
+	System.out.println("Depth First Search on the Graph");
+	g.DFS(0);
+	System.out.println("-------------------");
+	g.Dijstra(0);
+  }
+}
