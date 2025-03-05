@@ -1,0 +1,210 @@
+class TreeNode
+{
+	int data;
+	TreeNode left;
+	TreeNode right;
+	public TreeNode()
+	{
+		data =0;
+		left=right=null;
+	}
+	public TreeNode(int x){
+		data = x;
+		left = right = null;
+	}
+}
+
+class BST 
+{
+	TreeNode root;
+	public BST(){
+		root = null;
+	}
+	public void createTree(int v)
+	{
+		root = InsertNode(root, v);
+	}
+	public TreeNode InsertNode(TreeNode root, int x)
+	{
+		if(root==null){
+			root = new TreeNode(x);
+			return root;
+		}
+		
+		if(x < root.data) root.left = InsertNode(root.left, x);
+		else if(x > root.data) root.right = InsertNode(root.right, x);
+		
+		return root;
+	}
+	
+	//Thêm nút mới không sử dụng đệ quy
+	public void InsertTree(TreeNode root, int x)
+	{
+		TreeNode p = new TreeNode(x);
+		if(root==null){
+			root = p;
+			return;
+		} 
+		TreeNode parent, current;
+		current = root;
+		parent = null;
+		while(current!=null)
+		{
+			parent = current;
+			if(current.data==x)
+			{
+					System.out.println(" The key " + x + " already exists, no insertion");
+					return;
+			}			
+			else if(x < current.data) current = current.left;
+			else current = current.right;
+		}
+		//Thêm phần tử vào đúng vị trí
+		if(x < parent.data) parent.left = p;
+		else parent.right = p;
+		 
+	}
+	public void AddNode(int x)
+	{
+		InsertTree(root, x);
+	}
+	public void DisplayPreOrder()
+	{
+		preOrder(root);
+	}
+	public void preOrder(TreeNode p)
+	{
+		if(p!=null){
+			System.out.println(p.data);
+			preOrder(p.left);
+			preOrder(p.right);
+		}
+	}
+	
+	 
+
+	public void Del(int x)
+	{
+		TreeNode r =null; 
+		TreeNode parent, current;
+		TreeNode[] pointers = new TreeNode[1];
+		parent = searchKey(root, x, pointers);
+		current = pointers[0]; 
+		System.out.println("parent" + parent.data );	
+		System.out.println("current" + pointers[0].data );	
+				
+		if(current.left==null)
+		{
+			if(parent.data > current.data){
+				parent.left = current.right;
+			}
+			else parent.right = current.right;
+		}
+		else if(current.right ==null)
+		{
+			if(parent.data > current.data) parent.left= current.left;
+			else parent.right = current.left;
+		}
+		else {
+			TreeNode p = current;
+			TreeNode q = current.right;
+			TreeNode[] delnodes = new TreeNode[1];
+			//System.out.println("init p=" + p.data );
+			//System.out.println("init q=" + q.data );
+			r = searchStandFor(p, q, delnodes); 
+			TreeNode d = delnodes[0]; 
+			//System.out.println("r" + r.data );
+			//System.out.println("current" + current.data );
+			//System.out.println("d" + d.data );
+			//Xoa nut the mang
+			
+			if(r.data < d.data){
+				if(d.left!=null) r.right = d.left;
+				else if(d.right!=null) r.right = d.right;
+				else r.right = null;
+			}
+			else {
+				if(d.left!=null) r.left=d.left;
+				else if(d.right!=null) r.left = d.right;
+				else r.left = null;
+			}
+			//Thay the gia tri cua nut the mang va nut hien tai
+			current.data = d.data;
+			
+			
+		}
+		
+		
+		
+	}
+	
+	public TreeNode searchStandFor(TreeNode p, TreeNode q, TreeNode[] pointers)
+	{		 		 
+		while(q.left!=null)
+		{			 
+			p = q;
+			q = q.left;
+		}
+		pointers[0] = q;		
+		return p;
+	}
+	
+	TreeNode searchKey(TreeNode root, int x, TreeNode[] pointers )
+	{
+		TreeNode parent, current;
+		current = root;
+		parent = null;
+		
+		while((current!=null) &&(current.data!=x))
+		{
+			parent = current;
+			if(x < current.data) current = current.left;
+			else if(x > current.data) current = current.right;
+			else break;
+		}
+        pointers[0] = current;		
+		
+		/*if(root==null) return null;
+		if(root.data ==x) return root;
+		else if(x < root.data) return searchKey(root.left,x);
+		else return searchKey(root.right, x);*/
+		
+		return parent;
+	}
+
+	
+	
+	 	
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Binary Tree Example");
+	 
+	BST tree = new BST();
+	tree.createTree(44);
+	tree.createTree(18);
+	tree.createTree(88);
+	tree.createTree(13);
+	tree.createTree(37);
+	tree.createTree(59);
+	tree.createTree(108);
+	
+	tree.createTree(15);
+	tree.createTree(23);
+	tree.createTree(40);
+	tree.createTree(55);
+	tree.createTree(71);
+	tree.createTree(30);
+	
+	tree.DisplayPreOrder();
+		 
+	System.out.println("-------------------ADD---------------------");
+	tree.Del(18);
+	System.out.println("-------------------DEL---------------------");
+	
+	tree.DisplayPreOrder();
+	
+	
+  }
+}
