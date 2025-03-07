@@ -1,0 +1,174 @@
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
+
+class Graph
+{
+	int verticle_num;	 
+	int [][] A;
+	int MAX = 1000;
+	public Graph()
+	{		 
+		verticle_num = 5;		 
+		A = new int[verticle_num][verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			for(int j=0; j<verticle_num; j++)
+				A[i][j] =0;
+		A[0][1]=1;
+		A[0][2]=1;
+		A[0][3]=1;
+		A[0][4]=1;
+		
+		A[1][0]=1;
+		A[1][2]=1;
+		
+		A[2][0]=1;
+		A[2][1]=1;
+				
+		A[3][0]=1;
+		A[3][4]=1;
+		
+		 
+		A[4][0]=1;
+		A[4][3]=1;						 	 		 		
+	}
+	public boolean checkAdj(int i, int j)
+	{
+		if(A[i][j]==1) return true;
+		else return false;
+	}
+	public void Display()
+	{
+		System.out.println("-----------Adjacency Matrix of Graph-------------");
+		for(int i=0; i<verticle_num; i++)
+		{
+			for(int j=0; j<verticle_num; j++)
+				System.out.print(A[i][j] + "  ");
+			System.out.println();
+		}
+	}
+	public void dfs(int k, boolean[] visited)
+	{
+		visited[k] = true;
+		for(int u=0; u<verticle_num;u++)
+			if(checkAdj(u,k)&&!visited[u])
+				dfs(u, visited);
+	}
+	
+	public void DFS(int k, boolean[] visited)
+	{
+		 
+		Stack<Integer> S = new Stack<>();
+		String[] VerticleStatus = new String[verticle_num];
+		for(int i=0; i<verticle_num; i++)
+			VerticleStatus[i] = "White";
+		S.push(k);
+		VerticleStatus[k] ="Gray";
+		while(!S.isEmpty())
+		{
+			int u =(int)S.pop();
+			System.out.print(u + "-> ");
+			for(int v=0; v<verticle_num; v++)
+			{
+				if(VerticleStatus[v] =="White" && checkAdj(u, v))
+				{
+					S.push(v);
+					VerticleStatus[v]= "Gray";
+				}
+			}
+			VerticleStatus[u] ="Black";
+		}
+	}
+	
+	//Kiểm tra tính liên thông của đồ thị
+	public boolean is_connected()
+	{
+		boolean[] visited = new boolean[verticle_num];
+		for(int i=0; i<verticle_num; i++) visited[i] = false;
+		
+		dfs(0, visited);
+		for(int i=0; i<verticle_num;i++)
+			if(!visited[i]) return false;
+		return true;
+		
+	}
+	//Kiểm tra tính chất euler của đồ thị
+	public boolean is_euler()
+	{
+		boolean check = true;
+		for(int i=0; i<verticle_num; i++)
+		{
+			int t=0;
+			for(int j=0; j<verticle_num; j++)
+				t+=A[i][j];
+			if(t%2!=0) {
+				check=false;
+				break;
+			}
+		}
+		return check;
+	}
+	/*
+		Thuật toán liệt kê chu trình euler
+		1. Kiểm tra tính liên thông và tính tồn tại chu trình euler
+		2. Bắt đầu từ 1 đỉnh trong đồ thị
+		3. Nạp đỉnh vào ngăn xếp
+		4. Duyệt ngăn xếp với đk ngăn xếp còn khác rỗng
+		5. Duyệt lần lượt các đỉnh trong đồ thị, kiểm tra tính kết nối giữa các đỉnh với đỉnh u.
+			Nếu có cạnh kết nối thì xóa cạnh đó khỏi danh sách cạnh
+			Đẩy đỉnh v vào ngăn xếp
+		6. Kiểm tra phần tử ở đỉnh ngăn xếp, nếu nó vẫn là U thì đẩy vào Queue (lưu vết) và loại bỏ đỉnh đó (u) ra khỏi ngăn xếp.
+		
+	*/
+	public void find_euler_circle(int k)
+	{
+		if(!is_connected()){
+			System.out.println("Đồ thị không liên thông");
+			return;
+		}
+		if(!is_euler()){
+			System.out.println("Đồ thị không có chu trình Euler");
+			return;
+		}
+		Stack<Integer> S = new Stack<>();
+		Queue<Integer> Q = new LinkedList<>();		
+		S.push(0);
+		while(!S.isEmpty())
+		{
+			int u = S.peek();
+			for(int v=0; v<verticle_num;v++)
+				if(checkAdj(u, v))
+				{
+					A[u][v]--;
+					A[v][u]--;
+					S.push(v);
+					break;
+				}
+			//Kiểm tra đỉnh ở đầu ngăn xếp
+			if(u == S.peek())
+			{
+				Q.add(u);
+				S.pop();
+			}
+		}
+		System.out.println("Chu trình Euler:");
+		while(!Q.isEmpty())
+			System.out.print(Q.poll() + "->");
+		
+		 
+	}
+		
+}
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Graph Example");	 
+	
+	Graph g = new Graph();
+	g.Display();
+	System.out.println(g.is_euler()); 	
+	System.out.println(g.is_connected());
+	System.out.println("-----------------------");
+	g.find_euler_circle(0);
+  }
+}
+
