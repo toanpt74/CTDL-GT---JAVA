@@ -1,0 +1,211 @@
+import java.util.Random;
+class MyArray
+{
+	int size;
+	int[] data;
+	public MyArray(){
+		size = 0;
+		data = new int[0];
+	}
+	public MyArray(int s)
+	{
+		size = s;
+		data = new int[size];
+		for(int i=0; i<size; i++)
+		{
+			data[i] = (int)(Math.random()*((100-10)+1)); //random.nextInt();
+		}
+	}
+	public int findMin(int j)
+	{
+		int min = Integer.MAX_VALUE;
+		int k=j;
+		for(int i=j; i<size; i++)
+			if(data[i] < min)
+			{
+				min = data[i];
+				k=i;
+			}
+		return k;
+	}
+	public void InputData(){
+		Random random = new Random();
+		for(int i=0; i<size; i++)
+		{
+			data[i] = (int)(Math.random()*((100-10)+1)); //random.nextInt();
+		}
+	}
+	public void SelectionSort()
+	{
+		for(int i=0; i<size; i++)
+		{
+			int j = findMin(i);
+			if(i !=j)
+			{
+				int temp = data[i];
+				data[i] = data[j];
+				data[j] = temp;
+			}
+		}
+	}
+	
+	public void InsertSort()
+	{
+		for(int i=0; i<size; i++)
+		{
+			int x = data[i];
+			int j = i;
+			while(j > 0 && x < data[j-1])
+			{
+				data[j] = data[j-1];
+				j--;
+			}
+			data[j]=x;
+		}
+	}
+	public void BubbleSort()
+	{
+		for(int i=0; i<size; i++)
+			for(int j=i+1; j<size; j++)
+				if(data[i] > data[j])
+				{
+					int temp = data[i];
+					data[i] = data[j];
+					data[j] = temp;
+				}
+	}
+	/*
+		Thuật toán sắp xếp QuickSort
+		1. Chọn một phần tử làm phần tử trụ cột Pivot (chọn là phần tử đầu, cuối hoặc ở giữa)
+			- Chọn pivot = phần tử cuối cùng
+			- Duyệt tất cả các phần tử từ low đến high
+			- Nếu a[j] < pivot thì thực hiện hoán đổi vị trí hai phần tử a[j] và a[i] (ban đầu gán i = low-1, sau đó mỗi khi thỏa mãn đk tăng i lên 1)
+			
+		2. Phân đoạn danh sách làm hai phần
+			- Phần bên trái là các phần tử <= pivot
+			- Phần bên phải là các phần tử lớn hơn pivot
+		3. Đệ qui: áp dụng thuật toán tương tự cho hai phần còn lại
+	*/
+	//Thủ tục partition thực hiện việc đưa tất cả các phần tử nhỏ hơn pivot về phía trái
+	
+	public int partition(int low,int high)
+	{		 	
+		int pivot = data[high];
+		int i = low -1; //Khởi tạo i
+		
+		for(int j = low; j<=high-1; j++)
+		{
+			if(data[j] < pivot)
+			{
+				i++;
+				int temp = data[i];
+				data[i] = data[j];
+				data[j] = temp;
+				
+			}
+		}
+		//Đưa phần tử pivot về đúng vị trí, hoán đổi a[i+1] và a[high];
+		int temp = data[i+1];
+		data[i+1] = data[high];
+		data[high] = temp;
+		return i+1;
+	}
+	public void QuickSort(int low, int high)
+	{
+		if(low < high)
+		{
+			int pi = partition(low, high);
+			QuickSort(low, pi - 1);
+			QuickSort(pi + 1, high);
+			
+		}				
+	}
+	/*
+		Thuật toán merge sort là thuật toán sắp xếp, theo phương pháp chia để trị
+		
+	*/
+	public void Merge(int left, int mid, int right)
+	{
+		int n1 = mid - left + 1;
+		int n2 = right - mid;
+		int[] L = new int[n1];
+		int[] R = new int[n2];
+		//Sao chép dữ liệu vào các mảng cong
+		for(int i=0; i<n1;i++)
+			L[i] = data[left+i];
+		for(int i=0; i<n2; i++)
+			R[i] = data[mid+1+i];
+		//Hợp nhất hai mảng con
+		int i=0, j=0, k= left;
+		while(i < n1 && j <n2)
+		{
+			if(L[i] <= R[j])
+			{
+				data[k] = L[i];
+				i++;
+			}
+			else {
+				data[k] = R[j];
+				j++;
+			}
+			k++;
+		}
+		//Sao chép các phần tử còn lại của L vào mảng data
+		while(i<n1)
+		{
+			data[k] = L[i];
+			k++;
+			i++;
+		}
+		while(j<n2)
+		{
+			data[k] = R[j];
+			j++;
+			k++;
+		}
+	}
+	public void MergeSort(int left, int right)
+	{
+		if(size==1) return;
+		
+		if(left < right)
+		{
+			int mid = left + (right-left)/2;
+			MergeSort(left, mid);
+			MergeSort(mid+1, right);
+			Merge(left, mid, right);
+		}			
+	}
+	
+	
+	public void Display()
+	{
+		System.out.println("DANH SACH CAC PHAN TU");
+		for(int i=0; i<size; i++)
+			System.out.print(data[i] + ", ");
+		System.out.println();
+	}	
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Sort Algorithm Example");	 
+	
+	MyArray arr = new MyArray(10);
+	 
+	arr.Display();
+	//arr.BubbleSort();
+	
+	//System.out.println("Sort");
+	//arr.Display();
+	
+	//arr.QuickSort(0,9);
+	//System.out.println("Sort");
+	//arr.Display();
+	
+	arr.MergeSort(0, 9);
+	System.out.println("Sort");
+	arr.Display();
+	
+  }
+}
