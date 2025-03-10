@@ -1,0 +1,130 @@
+import java.util.Random;
+
+class Node{	
+	public int key;
+	public int next;
+	public Node(int key, int next){
+		this.key = key;
+		this.next = next;
+	}		
+}
+
+class HashTable
+{
+	int size;
+	int[] data;
+	Node[] hashTable ;
+	
+	public HashTable(int s)
+	{
+		size = s;
+		hashTable = new Node[size];
+		for(int i=0; i<size; i++){
+		
+			Node e = new Node(-1, -1);
+			hashTable[i] = e;
+			
+		}
+	}
+	public int hashFunction(int key)
+	{
+		return key % size;
+	}		
+	public void insert(int key)
+	{
+		int index = key % size;
+		if(hashTable[index].key == -1)
+		{
+			hashTable[index].key = key;			
+		}
+		else{
+			int current = index;
+			 
+			while(hashTable[current].next!=-1)
+				current = hashTable[current].next;
+			
+			for(int i=size-1; i>=0; i--)
+				if(hashTable[i].key==-1)
+				{
+					hashTable[i].key = key;
+					hashTable[current].next = i;
+					return;
+				}
+		}
+		
+	}
+	public void printData()
+	{
+		for(int i=0; i<size; i++)
+			System.out.println(hashTable[i].key + "->" + hashTable[i].next);
+	}
+	
+/*	
+	public HashTable(){
+		size = 0;
+		data = new int[0];
+	}
+	public HashTable(int s)
+	{
+		size = s;
+		data = new int[size];	
+		for(int i=0; i<size; i++) data[i] = 0;
+	}
+	public void Display()
+	{
+		System.out.println("DANH SACH CAC PHAN TU");
+		for(int i=0; i<size; i++)
+			System.out.print(data[i] + ", ");
+		System.out.println();
+	}
+	public void add(int x)
+	{
+		int index = x % size;
+		if(data[index] ==0) data[index] = x;
+		else{
+			int i=1;
+			for(i=1; i<size;i++){
+				index = (x + i*i)%size;
+				if(data[index] ==0)
+				{
+					data[index] = x;
+					break;
+				}
+			}
+		}				
+	}
+*/	
+	
+	 
+}
+
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Sort Algorithm Example");	 
+	
+	HashTable H = new HashTable(10);
+	/*H.add(89);
+	H.add(18);
+	H.add(49);
+	H.add(58);
+	H.add(69);
+	H.add(67);
+	H.add(23);
+	H.Display();*/
+ 	
+	H.insert(20);
+	H.insert(35);
+    H.insert(16);
+    H.insert(40);
+    H.insert(45);
+    H.insert(25);
+    H.insert(32);
+    H.insert(37);
+    H.insert(22);
+    H.insert(55);
+	H.printData();
+    //{20, 35, 16, 40, 45, 25, 32, 37, 22, 55}
+	
+  }
+}	
