@@ -1,0 +1,101 @@
+import java.util.Random;
+class MyArray
+{
+	int size;
+	int[] data;
+	public MyArray(){
+		size = 0;
+		data = new int[0];
+	}
+	public MyArray(int s)
+	{
+		size = s;
+		data = new int[size];
+		for(int i=0; i<size; i++)
+		{
+			data[i] = (int)(Math.random()*((100-10)+1)); //random.nextInt();
+		}
+	}
+	public void Display()
+	{
+		System.out.println("DANH SACH CAC PHAN TU");
+		for(int i=0; i<size; i++)
+			System.out.print(data[i] + ", ");
+		System.out.println();
+	}	
+	/*
+		Thuật toán merge sort
+		Merge: thủ tục trộn hai danh sách
+		- Danh sách thứ nhất từ phần tử First đến mid
+		- Danh sách thứ hai từ phần tử mid + 1 đến Last
+	*/	
+	public void Merge(int left, int mid, int right){
+		if(!(left <= mid)&&!(mid <= right)) return;
+		
+		int n1 = mid - left + 1;	
+		int n2 = right - mid;
+		int[]L = new int[n1];
+		int[]R = new int[n2];
+		
+		for(int i=0; i<n1;i++)
+			L[i] = data[left+i];
+		for(int j=0; j<n2;j++)
+			R[j] = data[mid +1 + j];
+		
+		//Hợp nhất hai mảng L và R
+		int i=0, j=0, k=left;
+		while(i<n1 && j<n2)
+		{
+			if(L[i] < R[j]){			
+				data[k] = L[i];
+				i++;
+			}
+			else {
+				data[k] = R[j];
+				j++;
+			}
+			k++;								
+		}
+		while(i<n1){
+			data[k]=L[i];
+			i++;
+			k++;
+		}
+		while(j<n2)
+		{
+			data[k]=R[j];
+			j++;
+			k++;
+		}	
+	}
+	public void MergeSort(int left, int right)
+	{
+		if(!(left<right)) return;
+		
+		if(left < right)
+		{
+			int mid =left+ (right-left)/2;
+			MergeSort(left, mid);
+			MergeSort(mid+1, right);
+			Merge(left, mid, right);
+		}			
+		
+	}
+}
+
+
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Sort Algorithm Example");	 
+	
+	MyArray arr = new MyArray(10);
+	 
+	arr.Display();
+	 
+	arr.MergeSort(0,9);
+	System.out.println("Đã sắp xếp");
+	arr.Display();
+	
+  }
+}	
