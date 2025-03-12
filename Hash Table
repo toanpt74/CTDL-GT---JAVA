@@ -29,10 +29,20 @@ class HashTable
 	public int hashFunction(int key)
 	{
 		return key % size;
-	}		
+	}
+	/*
+		Thuật toán thêm một phần tư vào bảng băm
+		- Tính vị trí phần tử cần thêm theo công thức index = key % M (M là số phần tử của mảng)
+		- Nếu H[index] chưa có giá trị thì lưu key vào vị trí đó (H[index] = key)
+		- Gán cho H[index].next = EMPTY
+		- Nếu vị trí đó đã chứa một key khác thì thực hiện
+		+ Tìm vị trí còn trống từ cuối mảng 
+		+ Gán key vào vị trí mới tìm được.
+		+ Gán giá trị next của ô index bằng vị trí ô mới tìm được
+	*/
 	public void insert(int key)
 	{
-		int index = key % size;
+		int index = hashFunction(key);
 		if(hashTable[index].key == -1)
 		{
 			hashTable[index].key = key;			
@@ -42,6 +52,7 @@ class HashTable
 			 
 			while(hashTable[current].next!=-1)
 				current = hashTable[current].next;
+			System.out.println("current:" + current);
 			
 			for(int i=size-1; i>=0; i--)
 				if(hashTable[i].key==-1)
@@ -53,6 +64,55 @@ class HashTable
 		}
 		
 	}
+	/*
+		Xoa một phần tử trong bảng băm
+		+ Tìm vị trí của phần tử cần xóa và phần tử trước nó trong danh sách
+		+ Nếu không tồn tại phần tử => return -1
+		+ Nếu có phần tử cần xóa thì phân thành các trường hợp sau:
+		1. Phần tử cần xóa ở giữa anh sách: gán thông tin next của phần tử prev = next của phần tử current. Và xóa phần tử current
+		2. Phần tử cần xóa ở đầu danh sách:
+		2.1. Tìm phần tử tiếp theo nextNode
+		2.1. Nếu danh sách chỉ có duy nhất một phần tử thì gán key và next của phần tử current là -1
+		2.2. Nếu có phần tử thì gán giá trị key, next của phần tử tiếp thep nextNode vào cho phần tử current. Sau đó xóa phần tử nextNode đi
+	*/
+	public int delete(int key)
+	{
+		int index = hashFunction(key);
+		int current = index;
+		int prev = -1;
+		while(current!=-1 && hashTable[current].key!=key){
+			prev = current;
+			current = hashTable[current].next;
+		}
+		System.out.println("prev:" + prev + ", current:" + current);
+		
+		if(current <0) return -1;
+		
+		//Xóa phần tử đầu tiên
+		if(prev ==-1){
+			int nextNode = hashTable[current].next;
+			if(nextNode!=-1){
+			
+				hashTable[current].key = hashTable[nextNode].key;
+				hashTable[current].next = hashTable[nextNode].next;
+				hashTable[nextNode].key = hashTable[nextNode].next=-1;
+			}
+			else {
+				hashTable[current].key=-1;
+				hashTable[current].next=-1;
+			}
+		}
+		else{
+			//Xóa các phần tử ở giữa
+			hashTable[prev].next = hashTable[current].next;
+			hashTable[current].key=-1;
+			hashTable[current].next=-1;
+		}
+		
+		
+		return -1;
+	}
+	
 	public void printData()
 	{
 		for(int i=0; i<size; i++)
@@ -114,17 +174,13 @@ public class Main {
 	H.Display();*/
  	
 	H.insert(20);
-	H.insert(35);
-    H.insert(16);
-    H.insert(40);
-    H.insert(45);
-    H.insert(25);
-    H.insert(32);
-    H.insert(37);
-    H.insert(22);
-    H.insert(55);
+	/*H.insert(30);
+	H.insert(40);
+	H.insert(50);*/
 	H.printData();
-    //{20, 35, 16, 40, 45, 25, 32, 37, 22, 55}
+	H.delete(20);
+	H.printData();
+	 
 	
   }
 }	
