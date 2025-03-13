@@ -1,0 +1,160 @@
+import java.util.ArrayList;
+import java.util.List;
+class KMP
+{
+	String data="ababcababcabc"; //"AABAACAADAABAAABAA" ;//"ABABABCABABABCABABABC";;
+	String pattern="abc"; //"ABCABCABC";  //"AABA"; //"ABABAC";
+	int[] pi;
+	public KMP(){
+		data="ababcababcabc";;
+		pattern="abc";
+	}
+	void search()
+	{
+		int M = pattern.length();
+		int N = data.length();
+		for(int i=0; i<=N-M;i++)
+		{
+			int j;
+			for(j =0; j<M; j++)
+			 if(data.charAt(i+j)!= pattern.charAt(j)) break;
+			if(j==M)
+				System.out.println("Pattern found at:" + i);
+			
+		}
+	}
+	/*
+		Thuật toán KMP thực hiện việc so sánh hai chuỗi pattern và data  từ trái qua phải
+		Bước 1. Tính toán bảng Prefix cho chuỗi con cần tìm kiếm.
+		Bước 2. Duyệt qua chuỗi lớn và so sánh từng ký tự của chuỗi lớn với từng ký tự của chuỗi con.
+		Bước 3. Nếu ký tự của chuỗi lớn và chuỗi con khớp nhau, ta tiếp tục so sánh tiếp theo.
+		Bước 4. Nếu ký tự của chuỗi lớn và chuỗi con không khớp nhau, ta sử dụng bảng Prefix để xác định vị trí tiếp theo để tìm kiếm chuỗi con.
+
+		Lặp lại bước 3 và 4 cho đến khi tìm thấy tất cả các vị trí của chuỗi con trong chuỗi lớn.
+		Định nghĩa Prifix của một chuỗi như sau:
+			Prifix của chuỗi S là một mảng P(), trong đó P(i)là độ dài của tiền tố thực sự dài nhất của chuỗi con S(0...i). (Chuỗi con nhưng không phải chính nó).
+			Rõ ràng P(0) = 0.
+			Ví dụ xâu S = "XYZXYZX"
+			Duyệt i = 0 đến cuối xâu S.
+			Duyệt j từ 0 đến < i
+			Kiểm tra lần lượt các xâu con có độ dài 1, 2, 3,..., i-1 kí tự (tính từ đầu)
+			Và các xâu con có độ dài tương tự, tính từ cuối (từ vị trí thứ i) xem chúng có bằng nhau không?
+			
+			Nếu bắng nhau gán phần tử Prefix[i] = j.
+			
+		
+	*/
+	public void prefix(String data)
+	{		
+		int n = data.length();
+		pi = new  int[n];
+		for(int i=0; i<n; i++)	
+			pi[i]=0;
+		
+		for(int i=1; i<n;i++)
+		{			 
+			for(int j=1; j<=i; j++)  
+			{
+				String s1 = data.substring(0,j);	
+				String s2 = data.substring(i-(j-1),i+1);	
+				if (s1.equals(s2)) pi[i] = j;
+			}
+		}
+		for(int i=0; i<n; i++)
+			System.out.print(pi[i] + ",");
+	}
+	public void prefixFunction(String data)
+	{
+		int n = data.length();
+		pi = new int[n];
+		for(int i=0; i<n; i++)	
+			pi[i]=0;
+		
+		for(int i=1; i<n;i++){
+			int j = pi[i-1];
+			while(j>0 && data.charAt(i)!=data.charAt(j))
+				j = pi[j-1];
+			if(data.charAt(i)==data.charAt(j))
+				j++;
+			pi[i] = j;
+		}
+		for(int i=0; i<n; i++)	
+			System.out.print(pi[i] + ",");
+		
+	}
+	/*
+		Thuật toán kmpSearch thực hiện
+		+ Kết hợp xâu patten và xâu text
+		+ Tính vector prefix của xâu kết hợp 
+		+ Tìm các vị trí trên prefix có giá trị bằng độ dài xâu patten.
+	*/
+	public void kmpSearch()
+	{
+		String S = pattern + "#" + data;
+		int n = pattern.length();
+		int m = data.length();
+		prefixFunction(S);
+		List<Integer> ans = new ArrayList<>();
+		for(int i=n+1; i<n+1+m; i++)
+		{
+			if(pi[i] == n)
+				ans.add(i-2*n);
+		}
+		System.out.println();
+		System.out.println("pattern:" + ans);
+	}
+	/*
+		Thuật toán KMP Search
+		1. Tính vector prefix của xâu pattern
+		2. So sánh lần lượt từng kí tự của chuỗi data và pattern, pattern[i] và data[j]
+		+ Nếu pattern[i] = data[j] thì tăng cả i và j lên 1
+		Cho đến khi j = m (độ dài của pattern) => Tìm được một so khớp
+		Ngược lại (không khớp) sử dụng thông tin trong prefix để quay lại search tiếp
+		3. Kiểm tra nếu j > 0 thì gán j = prefix[j-1];
+		Ngược lại tăng i lên để tìm
+		
+	*/
+	public void kmpsearch()
+	{
+		int n = data.length();
+		int m = pattern.length();
+		prefixFunction(pattern);
+		int i=0;
+		int j=0;
+		while(i< n)
+		{
+			if(data.charAt(i)== pattern.charAt(j))
+			{
+				i++;
+				j++;
+			}
+			if(j==m)
+			{
+				System.out.println("Mẫu xuất:" + i-j); //i vị trí trên xâu data, j=m độ dài pattern
+				j = pi[j-1];
+			}else if(i<n && data.charAt(i)!=pattern.charAt(j)) {
+				if(j > 0)
+				{
+					j=pi[j-1];
+				}
+				else i++;
+				
+			}
+		}
+	}
+	
+	
+}
+
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Pattern Matching Example");	 
+	 
+	KMP kmp = new KMP();
+	//kmp.search();
+	kmp.kmpsearch();
+	 
+  }
+}	
+
+ 
